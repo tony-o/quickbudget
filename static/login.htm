@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width, intial-scale=1.0, maximum-scale=1.0" />
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-touch-fullscreen" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />		<link rel="stylesheet" href="stylez.css" />
+		<script src="http://code.jquery.com/jquery-1.8.3.min.js"></script>
+		<script>
+			$(document).ready(function(){
+        window.top.scrollTo(0,1);
+        var newaccount = false;
+        $("#newaccount").click(function(e){
+          e.preventDefault();
+          $(this).parent().find(".right span").each(function(){
+            var t = newaccount = $(this).hasClass("x_alt");
+            $(this).removeClass(t?"x_alt":"check_alt").addClass(t?"check_alt":"x_alt");
+            if(t){ $("#password").attr("placeholder","Make it tough"); }else{ $("#password").attr("placeholder","You know the drill"); }
+            if(t){ $("#go").text("Register"); }else{ $("#go").text("Login"); }
+          });
+        });
+        $("#go").click(function(){
+          var username = $("#username").val();
+          var password = $("#password").val();
+          var handler = function(){
+            var status = arguments[0].status || arguments[2].status;
+            console.log(status);
+            if(status == 200){
+              //login success
+              window.location = "/index.htm";
+            }else if(status == 201){
+              $.ajax({
+                url:"/login"
+                ,data:{username:username,password:password}
+                ,success:handler
+                ,error:handler
+                ,type:"POST"
+              });
+            }else if(status == 500 || status == 401){
+              $("#error").removeClass("hidden");
+            }
+          };
+          $("#error").addClass("hidden");
+          $.ajax({
+            url:"/"+(newaccount?"register":"login")
+            ,data:{username:username,password:password}
+            ,success:handler
+            ,error:handler
+            ,type:"POST"
+          });
+        });
+			});
+		</script>
+	</head>
+	<body>
+		<div id="addcategory" class="page">
+			<div class="header">
+				<span class="iconic iconic_white bars"></span> login/register
+			</div>
+			<div class="item hidden center error" id="error">
+				Invalid username/password
+			</div>
+			<div class="item">
+				<label for="username">Email</label>
+				<input type="email" placeholder="" name="username" id="username" />
+			</div>
+			<div class="item">
+				<label for="password">Password</label>
+				<input type="password" placeholder="You know the drill" name="password" id="password" />
+			</div>
+			<div class="item">
+				<a href="##" class="block" id="newaccount">New Account?</a>
+				<div class="right clean hardpad">
+          <span class="iconic x_alt" />
+        </div>
+			</div>			
+			<div class="item">
+				<button href="#main" class="button green block" id="go">Login</button>
+			</div>
+		</div>
+	</body>
+</html>
