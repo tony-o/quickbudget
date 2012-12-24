@@ -30,6 +30,7 @@
                       $(o).find(".right").text(d[i].v);
                       $("#main").append($(o));
                     }
+                    rehookitems();
                   }
                 }
               });
@@ -161,22 +162,23 @@
 						$(open.obj).removeClass("clean").addClass("dollars");
 					}
 					open = {};
-          alert("here");
 					if(hide){return;}
 					open.obj = $(this).find("div.right");
 					open.objs = $(open.obj).html();
 					$(open.obj).addClass("clean").removeClass("dollars").html("");
 					$(open.obj).append($(".templates .category").clone().fadeIn("fast"));
 				};
-				$("#main .item").each(function(){
-					var self = $(this);
-					$(self).touchwipe({
-						wipeLeft:function(){swipemain.apply(self,arguments);}
-						,wipeRight:function(){swipemain.apply(self,[true]);}
-						,min_move_x:25
-						,preventDefaultEvents:true
-					});
-				});
+        var rehookitems = function(){ 
+          $("#main .item").each(function(){
+            var self = $(this);
+            $(self).touchwipe({
+              wipeLeft:function(){swipemain.apply(self,arguments);}
+              ,wipeRight:function(){swipemain.apply(self,[true]);}
+              ,min_move_x:25
+              ,preventDefaultEvents:true
+            });
+          });
+        };
         navigate("#main","#main");
 			});
 		</script>
