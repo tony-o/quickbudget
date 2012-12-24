@@ -25,7 +25,7 @@ app.configure(function(){
   app.use(express.cookieParser());
   app.use(express.bodyParser());
   app.use(express.methodOverride());
-  app.use(express.session({secret:process.env.SECRETE || require("./config").secret}));
+  app.use(express.session({secret:process.env.SECRET || require("./config").secret}));
   app.use(passport.initialize());
   app.use(passport.session());
   app.use(app.router);
