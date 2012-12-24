@@ -29,6 +29,7 @@
               //login success
               window.location = "/index.htm";
             }else if(status == 201){
+              $("#error").addClass("hidden");
               $.ajax({
                 url:"/login"
                 ,data:{username:username,password:password}
@@ -40,7 +41,7 @@
               $("#error").removeClass("hidden");
             }
           };
-          $("#error").addClass("hidden");
+          //$("#error").addClass("hidden");
           $.ajax({
             url:"/"+(newaccount?"register":"login")
             ,data:{username:username,password:password}

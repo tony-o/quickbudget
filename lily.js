@@ -1,7 +1,6 @@
 var mongoose = require("mongoose");
 var crypto = require("crypto");
-var config = require("./config");
-mongoose.connect(config.db);
+mongoose.connect(process.env.DB || require("./config").db);
 
 var schemas = {};
 
@@ -25,7 +24,7 @@ schemas.expense = mongoose.model("expenses",mongoose.Schema({
 
 var pass = function(password){
   var shasum = crypto.createHash("sha1");
-  shasum.update(password+"::"+config.salt);
+  shasum.update(password+"::"+(process.env.SALT || require("./config").salt));
   return shasum.digest("hex");
 };
 
@@ -56,6 +55,20 @@ module.exports = {
   ,addCategory:function(data,c){
     var n = new schemas.category(data);
     n.save(c);
+  }
+  ,editCategory:function(data,c){
+    schemas.category.find({username:data.user,name:data.oldname},function(e,d){
+      for(var i in d){
+        d[i].name = data.newname;
+        d[i].save();
+      }
+      schemas.expense.find({username:data.user,category:data.oldname},function(e,d){
+        for(var i in d){
+          d[i].category = data.newname;
+          d[i].save();
+        }
+      }); 
+    });
   }
   ,addExpense:function(data,c){
     data.period = period();

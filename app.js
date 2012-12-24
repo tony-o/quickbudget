@@ -79,4 +79,4 @@ app.get("/index.htm",function(q,s,n){
   if(q.isAuthenticated()){ return n(); }
   s.redirect("/login.htm");  
 });
-app.listen(3000);
+app.listen(process.env.PORT || 3000);
