@@ -21,7 +21,7 @@ passport.use(new localstrat(
 ));
 
 app.configure(function(){
-  //app.use(express.logger());
+  process.env.ENV == "production" && app.use(express.logger());
   app.use(express.cookieParser());
   app.use(express.bodyParser());
   app.use(express.methodOverride());
@@ -33,6 +33,8 @@ app.configure(function(){
 });
 
 app.post("/login",passport.authenticate("local",{failureRedirect:null,failureFlash:false}),function(q,s){
+  s.cookie("username",q.user.username);
+  console.log(q.user);
   s.redirect("/index.htm");
 });
 
