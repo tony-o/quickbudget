@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
+    <title>Quickbudget</title>
 		<meta name="viewport" content="width=device-width, intial-scale=1.0, maximum-scale=1.0" />
 		<meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-touch-fullscreen" content="yes" />
@@ -160,6 +161,7 @@
 						$(open.obj).removeClass("clean").addClass("dollars");
 					}
 					open = {};
+          alert("here");
 					if(hide){return;}
 					open.obj = $(this).find("div.right");
 					open.objs = $(open.obj).html();
