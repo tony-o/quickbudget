@@ -2,7 +2,6 @@ var express = require("express");
 var passport = require("passport");
 var localstrat = require("passport-local").Strategy;
 var lily = require("./lily");
-var config = require("./config");
 var app = express();
 
 passport.serializeUser(function(u,d){d(null,u);});
@@ -26,7 +25,7 @@ app.configure(function(){
   app.use(express.cookieParser());
   app.use(express.bodyParser());
   app.use(express.methodOverride());
-  app.use(express.session({secret:config.secret}));
+  app.use(express.session({secret:process.env.SECRETE || require("./config").secret}));
   app.use(passport.initialize());
   app.use(passport.session());
   app.use(app.router);
