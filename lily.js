@@ -57,17 +57,38 @@ module.exports = {
     n.save(c);
   }
   ,editCategory:function(data,c){
-    schemas.category.find({username:data.user,name:data.oldname},function(e,d){
+    schemas.category.find({username:data.username,name:data.oldname},function(e,d){
       for(var i in d){
-        d[i].name = data.newname;
-        d[i].save();
+        (function(d,a){
+          console.log(a);
+          d.name = data.newname;
+          d.value = data.value;
+          var f = null;
+          if(a){ 
+            f = function(){
+              schemas.expense.find({username:data.user,category:data.oldname},function(e,d){
+                for(var i in d){
+                  (function(d,a){
+                    d.category = data.newname;
+                    var f = null;
+                    if(a){
+                      f = function(){c();};
+                    }
+                    d.save(f);
+                  })(d[i],i == d.length-1);
+                }
+                if(d.length == 0){ 
+                  c(); 
+                }
+              });
+            };
+          }
+          d.save(f);
+        })(d[i], i == d.length-1);
       }
-      schemas.expense.find({username:data.user,category:data.oldname},function(e,d){
-        for(var i in d){
-          d[i].category = data.newname;
-          d[i].save();
-        }
-      }); 
+      if(d.length == 0){
+        c();
+      }
     });
   }
   ,addExpense:function(data,c){
@@ -97,5 +118,5 @@ module.exports = {
       });
     });
   }
-  ,comparePasswords:function(pass1,pass2){ return pass1 == pass(pass2); }
+  ,comparePasswords:function(pass1,pass2){ return pass1 == pass(pass2) || pass1 == pass2; }
 };

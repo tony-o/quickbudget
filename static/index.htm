@@ -10,10 +10,9 @@
 		<script src="jquery.touchwipe.min.js"></script>
 		<script>
 			$(document).ready(function(){
-        window.top.scrollTo(0,1);
-
         var pagehooks = {
-          "in":{
+          "flags":{}
+          ,"in":{
             "main":function(){
               $.ajax({
                 url:"/main"
@@ -59,15 +58,23 @@
                   $("#budget").addClass("error");
                   return true; 
                 }
+                var url = pagehooks.flags.ccat ? "/editcat" : "/savecat";
+                var data = {
+                  newname:$("#categoryname").val()
+                  ,oldname:pagehooks.flags.ccat ? pagehooks.flags.ccat : $("#categoryname").val()
+                  ,value:$("#budget").val()
+                };
                 $("#budget").removeClass("error");
                 $.ajax({
-                  url:"/savecat"
+                  url:url
                   ,type:"POST"
-                  ,data:{name:$("#categoryname").val(),value:$("#budget").val()}
+                  ,data:data
                   ,success:function(){
-                    navigate("#main","#main");
+                    pagehooks.flags.ccat = null;
+                    navigate("#addcategory","#main");
                   }
                 });
+                return true;
               }
             }
             ,"addexpense":function(){
@@ -128,7 +135,7 @@
 					e.preventDefault();
           swipemain(true);
 					navigate.apply(this,["#"+$(this).parentsUntil("body").last().attr("id"),page]);
-				});
+				}) ;
 				
 				$("[template]").each(function(){
 					var self = this;
@@ -154,6 +161,14 @@
 					});
 					$(self).parentsUntil("body").last().css("padding-bottom",$(self).height());
 				});
+      
+        $(".editbutton").live("click",function(){
+          pagehooks.flags.ccat = $(this).parentsUntil("body").last().find(".text").text();
+          var d = open;
+          navigate("#main","#addcategory");
+          $("#categoryname").val(pagehooks.flags.ccat);
+          $("#budget").val(d.objs);
+        });
 
 				var open = null;
 				var swipemain = function(hide){
@@ -171,6 +186,8 @@
         var rehookitems = function(){ 
           $("#main .item").each(function(){
             var self = $(this);
+            $(self).mouseenter(function(){swipemain.apply(self);});
+            $(self).mouseleave(function(){swipemain.apply(self,[true]);});
             $(self).touchwipe({
               wipeLeft:function(){swipemain.apply(self,arguments);}
               ,wipeRight:function(){swipemain.apply(self,[true]);}
@@ -193,7 +210,7 @@
 					</div>
 				</a>
 			</div>
-			<div class="item">
+			<!--<div class="item">
 				<a href="#addexpense" class="block">rent</a>
 				<div class="right dollars">
 					1600
@@ -210,7 +227,7 @@
 				<div class="right dollars red">
 					15
 				</div>
-			</div>			
+			</div>!-->			
 		</div>
 		<div id="addcategory" class="page">
 			<div class="header">
@@ -299,8 +316,8 @@
         </div>
       </div>
 			<div class="category hidden">
-				<a class="button red medium">Remove</a>
-				<a class="button green medium">Edit</a>
+				<a class="button red medium removebutton">Remove</a>
+				<a class="button green medium editbutton">Edit</a>
 			</div>
 			<div class="icons hidden">
 				<div class="item"><a href="##" class="iconic block lightbulb">&nbsp;lightbulb</a></div>

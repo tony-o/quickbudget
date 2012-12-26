@@ -34,20 +34,25 @@ app.configure(function(){
 
 app.post("/login",passport.authenticate("local",{failureRedirect:null,failureFlash:false}),function(q,s){
   s.cookie("username",q.user.username);
-  console.log(q.user);
+  s.cookie("password",q.user.password);
   s.redirect("/index.htm");
 });
 
 app.post("/register",function(q,s){
   lily.addUser(q.body,function(e,u){
-    console.error(e);
-    console.log(u);
     if(e){
       s.send(500);
     }else{
       s.send(201);
     }
   });  
+});
+
+app.post("/editcat",function(q,s){
+  q.body.username = q.user.username;
+  lily.editCategory(q.body,function(e,u){
+    s.end("hard to sleep");
+  });
 });
 
 app.post("/savecat",function(q,s){
@@ -64,7 +69,7 @@ app.post("/saveexp",function(q,s){
   });
 });
 app.get("/",function(q,s){
-  s.redirect("/login.htm");
+  s.redirect("/splash");
 });
 app.get("/main",function(q,s){
   lily.getCategories(q.user.username,function(e,i){
@@ -76,8 +81,28 @@ app.get("/getexp",function(q,s){
     s.end(JSON.stringify({"data":i}));
   });
 });
+
+app.get("/splash",function(q,s,n){
+  q.body.username = q.cookies.username;
+  q.body.password = q.cookies.password;
+  s.cookie("username","");
+  s.cookie("password","");
+  passport.authenticate("local",function(e,u,i){
+    if(e || !u){ 
+      console.log("e or !u");
+      s.redirect("/login.htm");
+      return ;n(); 
+    }
+    q.login(u,function(){
+      s.cookie("username",q.body.username);
+      s.cookie("password",q.body.password);
+      s.redirect("/index.htm");
+    });
+  })(q,s,n);
+});
+
 app.get("/index.htm",function(q,s,n){
   if(q.isAuthenticated()){ return n(); }
-  s.redirect("/login.htm");  
+  s.redirect("/splash");  
 });
 app.listen(process.env.PORT || 3000);
