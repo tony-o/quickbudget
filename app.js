@@ -72,6 +72,7 @@ app.get("/",function(q,s){
   s.redirect("/splash");
 });
 app.get("/main",function(q,s){
+  if(!q.user || !q.user.username){s.redirect("/splash");return;}
   lily.getCategories(q.user.username,function(e,i){
     s.end(JSON.stringify({"data":i}));
   });
