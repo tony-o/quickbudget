@@ -34,7 +34,7 @@ div.menu{
     background:url("./stressed_linen.png");
 }
 div.menu:after{
-    content:" ";
+    content: " ";
     height:0;
     display:block;
     clear:both;
@@ -50,10 +50,12 @@ div.menu .dollars.right.clean{
     text-align:center;
     color:rgb(240,240,240);
     display:inline-block;
-    font-size:.75em;
+    font-size:1.25em;
     padding:.5em;
     margin:0;
-    width:6em;
+    width:3em;
+    position:relative;
+    height:100%;
     text-decoration:none;
 }
 .menubutton > span.iconic{display:block;color:rgb(240,240,240);}

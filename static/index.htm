@@ -61,6 +61,7 @@
                 var url = pagehooks.flags.ccat ? "/editcat" : "/savecat";
                 var data = {
                   newname:$("#categoryname").val()
+                  ,name:$("#categoryname").val()
                   ,oldname:pagehooks.flags.ccat ? pagehooks.flags.ccat : $("#categoryname").val()
                   ,value:$("#budget").val()
                 };
@@ -72,6 +73,9 @@
                   ,success:function(){
                     pagehooks.flags.ccat = null;
                     navigate("#addcategory","#main");
+                  }
+                  ,error:function(){
+                    alert(arguments.length);
                   }
                 });
                 return true;
@@ -168,6 +172,17 @@
           navigate("#main","#addcategory");
           $("#categoryname").val(pagehooks.flags.ccat);
           $("#budget").val(d.objs);
+        });
+        
+        $(".removebutton").live("click",function(){
+          $.ajax({
+            url:"/removecat"
+            ,type:"POST"
+            ,data:{name:$(this).parentsUntil(".page").last().find("a").text()}
+            ,success:function(){
+              navigate("#main","#main");
+            }
+          });
         });
 
 				var open = null;
@@ -285,11 +300,9 @@
 			<div class="menu">
 				<a class="menubutton active" href="##addexpensesp">
 					<span class="iconic pen"></span>
-					Add Expense
 				</a>
 				<a class="menubutton" href="##expensehistory">
 					<span class="iconic list"></span>
-					History
 				</a>
 			</div>
 		</div>
@@ -316,8 +329,8 @@
         </div>
       </div>
 			<div class="category hidden">
-				<a class="button red medium removebutton">Remove</a>
-				<a class="button green medium editbutton">Edit</a>
+				<span class="button red medium removebutton">Remove</span>
+				<span class="button green medium editbutton">Edit</span>
 			</div>
 			<div class="icons hidden">
 				<div class="item"><a href="##" class="iconic block lightbulb">&nbsp;lightbulb</a></div>

@@ -58,7 +58,15 @@ app.post("/editcat",function(q,s){
 app.post("/savecat",function(q,s){
   q.body.username = q.user.username;
   lily.addCategory(q.body,function(e,u){
-    console.log(u);
+    s.end("william's son");
+  });
+});
+
+app.post("/removecat",function(q,s){
+  q.body.username = q.user.username;
+  console.log("removecat");
+  lily.removeCategory(q.body,function(e,u){
+    s.end("william's son");
   });
 });
 

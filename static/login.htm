@@ -4,12 +4,15 @@
 		<meta name="viewport" content="width=device-width, intial-scale=1.0, maximum-scale=1.0" />
 		<meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-touch-fullscreen" content="yes" />
-		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />		<link rel="stylesheet" href="stylez.css" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />		
+    <link rel="stylesheet" href="stylez.css" />
+    <link rel="stylesheet" href="stylez.login.css" />
 		<script src="http://code.jquery.com/jquery-1.8.3.min.js"></script>
 		<script>
 			$(document).ready(function(){
         window.top.scrollTo(0,1);
         var newaccount = false;
+        var pageflag = "login";
         $("#newaccount").click(function(e){
           e.preventDefault();
           $(this).parent().find(".right span").each(function(){
@@ -18,6 +21,34 @@
             if(t){ $("#password").attr("placeholder","Make it tough"); }else{ $("#password").attr("placeholder","You know the drill"); }
             if(t){ $("#go").text("Register"); }else{ $("#go").text("Login"); }
           });
+        });
+        $("#initlogin").click(function(e){
+          if(pageflag != "login"){
+            pageflag = "login";
+            newaccount = false;
+            $("#newaccount").parent().find(".right > span").removeClass("check_alt").addClass("x_alt");
+            $(".page").fadeOut(function(){
+              $("#password").attr("placeholder","You know the drill");
+              $("#go").text("Login");
+              $(".page").fadeIn();
+            });
+          }else{
+            $(".page").fadeIn();
+          }
+        });
+        $("#initregister").click(function(e){         
+          if(pageflag != "register"){
+            pageflag = "register";
+            newaccount = true;
+            $("#newaccount").parent().find(".right > span").removeClass("x_alt").addClass("check_alt");
+            $(".page").fadeOut(function(){
+              $("#password").attr("placeholder","Make it tough");
+              $("#go").text("Register");
+              $(".page").fadeIn();
+            });
+          }else{
+            $(".page").fadeIn();
+          }
         });
         $("#go").click(function(){
           var username = $("#username").val();
@@ -55,9 +86,9 @@
 	</head>
 	<body>
 		<div id="addcategory" class="page">
-			<div class="header">
+			<!--<div class="header">
 				<span class="iconic iconic_white bars"></span> login/register
-			</div>
+			</div>!-->
 			<div class="item hidden center error" id="error">
 				Invalid username/password
 			</div>
@@ -69,7 +100,7 @@
 				<label for="password">Password</label>
 				<input type="password" placeholder="You know the drill" name="password" id="password" />
 			</div>
-			<div class="item">
+			<div class="item hidden">
 				<a href="##" class="block" id="newaccount">New Account?</a>
 				<div class="right clean hardpad">
           <span class="iconic x_alt" />
@@ -79,5 +110,15 @@
 				<button href="#main" class="button green block" id="go">Login</button>
 			</div>
 		</div>
+    <div class="menuoverlay">
+      <h1 id="initregister">
+        Get Started
+        <span class="small">Create your Budget</span>
+      </h1>
+      <h1 id="initlogin">
+        Sign In
+        <span class="small">QuickBudget Account</span>
+      </h1>
+    </div>
 	</body>
 </html>

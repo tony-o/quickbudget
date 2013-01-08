@@ -56,6 +56,22 @@ module.exports = {
     var n = new schemas.category(data);
     n.save(c);
   }
+  ,removeCategory:function(data,c){
+    console.log("removing:" + JSON.stringify(data));
+    schemas.category.find({username:data.username,name:data.name},function(e,d){
+      var o = d.length;
+      console.log("size:" + o);
+      var p = function(){
+        o--;
+        if(o == 0){
+          c();
+        }
+      };
+      for(var i in d){
+        d[i].remove(p);
+      }
+    });
+  }
   ,editCategory:function(data,c){
     schemas.category.find({username:data.username,name:data.oldname},function(e,d){
       for(var i in d){
