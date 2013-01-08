@@ -35,7 +35,7 @@ div.item label{
 }
 .menuoverlay > h1 > .small{
   font-size:.8em;
-  color:rgba(255,255,255,.25);
+  color:rgba(255,255,255,.40);
   display:block;
   font-weight:lighter;
   padding-left:0;
