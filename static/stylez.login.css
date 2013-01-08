@@ -14,7 +14,7 @@ div.item label{
 .page{
   margin-top:5%;
   display:none;
-  padding-bottom:125px;
+  margin-bottom:125px;
 }
 .menuoverlay{
   position:fixed;
@@ -62,4 +62,5 @@ div.error{
   font-size:1em;
   font-weight:bold;
   text-align:center;
+  line-height:1em;
 }
