@@ -201,8 +201,8 @@
         var rehookitems = function(){ 
           $("#main .item").each(function(){
             var self = $(this);
-            $(self).mouseenter(function(){swipemain.apply(self);});
-            $(self).mouseleave(function(){swipemain.apply(self,[true]);});
+ //           $(self).mouseenter(function(){swipemain.apply(self);});
+ //           $(self).mouseleave(function(){swipemain.apply(self,[true]);});
             $(self).touchwipe({
               wipeLeft:function(){swipemain.apply(self,arguments);}
               ,wipeRight:function(){swipemain.apply(self,[true]);}
